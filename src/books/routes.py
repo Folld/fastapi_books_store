@@ -1,8 +1,14 @@
-from pydantic import BaseModel, Field
+from typing import List
 
-from fastapi import Cookie, Header, status, HTTPException, Depends
+from fastapi import status, Depends
 from fastapi_utils.inferring_router import InferringRouter
 from fastapi_utils.cbv import cbv
+from sqlalchemy.orm import Session
+
+from books.schemas import BookDTO
+from books.services import BookService
+from database import get_db
+from utils.dependencies import offset_limit_paginator
 
 
 router = InferringRouter(prefix='/books', tags=['books'])
@@ -10,25 +16,14 @@ router = InferringRouter(prefix='/books', tags=['books'])
 
 @cbv(router)
 class BooksView:
-    class RequestDTO(BaseModel):
-        name: str = Field(example='Ring of the King', title='Name of book')
-        desc: str | None = Field(None, alias='description', example='Description')
-        tax: float | None = Field(ge=0, le=100)
-        price: float
+    session: Session = Depends(get_db)
 
-    class ResponseDTO(BaseModel):
-        name: str
-        description: str | None = Field(alias='desc')
-        cookie: str | None
-        user_agent: str | None
+    @router.get('/list', response_model=List[BookDTO], response_model_by_alias=True, status_code=status.HTTP_200_OK)
+    async def get_books(self, paginator: dict = Depends(offset_limit_paginator)):
+        service = BookService(self.session)
+        return service.get_all_books(**paginator)
 
-    @router.get('/', response_model=ResponseDTO, response_model_by_alias=True, status_code=status.HTTP_200_OK)
-    async def get_book(self,
-                       item: RequestDTO = Depends(),
-                       cook: str | None = Cookie(default=None),
-                       user_agent: str = Header(default=None)):
-        return self.ResponseDTO(**item.dict(), cookie=cook, user_agent=user_agent)
-
-    @router.post('/')
-    async def create_book(self):
-        pass
+    @router.post('/create')
+    async def create_book(self, book: BookDTO):
+        service = BookService(self.session)
+        return service.create_book(book)
