@@ -1,1 +1,0 @@
-from .routes import router as catalog_router
