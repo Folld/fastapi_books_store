@@ -7,8 +7,6 @@ from alembic import context
 
 from books.models import *
 from authors.models import *
-from carts.models import *
-from catalog.models import *
 
 from database import Base
 

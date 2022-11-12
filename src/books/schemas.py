@@ -1,31 +1,42 @@
 from fastapi_utils.api_model import APIModel
-from pydantic import Field, validator
-
-from authors.models import Author
-from books.models import Book
-from utils.validators import check_model_id_exists
+from pydantic import Field
 
 
-class BookCreate(APIModel):
+class BaseBook(APIModel):
+    ...
+
+
+class BookCreateRequest(BaseBook):
     name: str = Field(example='Ring of the King', title='Name of book')
     price: float = Field(0, example=9.99)
     author_id: int
 
-    @validator('author_id')
-    def check_author_exists(cls, value):
-        check_model_id_exists(Author, value, raise_exception=True)
-        return value
 
-
-class BookOut(BookCreate):
+class BookUpdateRequest(BaseBook):
     id: int
-
-
-class BookUpdate(BookOut):
     name: str | None = Field(example='Ring of the King', title='Name of book')
     price: float | None = Field(example=9.99)
+    author_id: int | None = Field(example=9.99)
 
-    @validator('id')
-    def validate_id(cls, value):
-        check_model_id_exists(Book, value, raise_exception=True)
-        return value
+
+class BookOut(BaseBook):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+class BookCreateResponse(BookOut):
+    ...
+
+
+class BookUpdateResponse(BookOut):
+    name: str | None = Field(example='Ring of the King', title='Name of book')
+    price: float | None = Field(example=9.99)
+    author_id: int | None = Field(example=9.99)
+
+
+class BookListResponse(BookOut):
+    name: str | None
+    price: str | None
+    author_id: int | None
