@@ -4,8 +4,6 @@ from typing import Optional
 from pydantic import BaseSettings, Field
 
 BASE_DIR = Path(__file__).parent
-SQLITE_PATH = BASE_DIR / "sql_app.db"
-SQLALCHEMY_DATABASE_URL = "sqlite:///" + SQLITE_PATH.__str__()
 
 
 class _UvicornConfig(BaseSettings):
