@@ -9,5 +9,5 @@ async def check_model_id_exists(model, model_id: int, raise_exception: bool = Fa
     async with ASession() as session:
         instance = await session.get(model, model_id)
         if not instance and raise_exception:
-            raise HTTPException(detail=f'{model.__name__} id {model_id} does not exists', status_code=400)
+            raise HTTPException(detail=f'{model.__name__} id {model_id} does not exists', status_code=404)
         return bool(instance)

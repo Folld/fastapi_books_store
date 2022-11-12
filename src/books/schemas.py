@@ -3,6 +3,9 @@ from pydantic import Field
 
 
 class BaseBook(APIModel):
+    """
+    Base book model
+    """
     ...
 
 
@@ -36,7 +39,7 @@ class BookUpdateResponse(BookOut):
     author_id: int | None = Field(example=9.99)
 
 
-class BookListResponse(BookOut):
+class BookRetrieveResponse(BookOut):
     name: str | None
     price: str | None
     author_id: int | None

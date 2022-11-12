@@ -4,8 +4,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from authors.models import Author
 from authors.services import AuthorService
+from books.exceptions import BookNotFoundError
 from books.models import Book
-from books.schemas import BookOut, BookCreateResponse, BookUpdateResponse, BookUpdateRequest, BookCreateRequest
+from books.schemas import BookCreateResponse, BookUpdateResponse, BookUpdateRequest, BookCreateRequest
 from utils.validators import check_model_id_exists
 
 
@@ -34,10 +35,21 @@ class BookService:
     async def __is_book_exists(book_id: id):
         await check_model_id_exists(Book, book_id, raise_exception=True)
 
-    async def get_all(self, offset: int | None = None, limit: int | None = None) -> list[Book]:
+    async def get_list(self, offset: int | None = None, limit: int | None = None) -> list[Book]:
         stmt = Statements.select_all(offset, limit)
         result = await self.session.execute(stmt)
         return result.scalars().all()
+
+    async def get(self, book_id: int) -> Book:
+        result = await self.session.get(Book, book_id)
+        if not result:
+            raise BookNotFoundError(f'Книга id={book_id} не найдена')
+        return result
+
+    async def delete(self, book_id: int):
+        book = await self.get(book_id)
+        await self.session.delete(book)
+        await self.session.commit()
 
     async def update(self, book: BookUpdateRequest) -> BookUpdateResponse:
         await self.__is_book_exists(book.id)
