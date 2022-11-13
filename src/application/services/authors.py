@@ -22,8 +22,8 @@ class AuthorService:
     def repo(self):
         return self._repo_class(self.session)
 
-    async def get_list(self, offset: int | None = None, limit: int | None = None) -> list[Author]:
-        result = await self.repo.get_list(offset=offset, limit=limit)
+    async def get_list(self, offset: int | None = None, limit: int | None = None, search: str = None) -> list[Author]:
+        result = await self.repo.get_list(offset=offset, limit=limit, search=search)
         return result.scalars().all()
 
     async def get_author(self, author_id: int) -> Author:

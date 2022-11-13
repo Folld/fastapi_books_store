@@ -1,4 +1,4 @@
-from sqlalchemy import select, update
+from sqlalchemy import select, update, or_
 from sqlalchemy.engine import ChunkedIteratorResult
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -16,8 +16,9 @@ class AuthorRepository:
         stmt = Statements.select_by_id(author_id)
         return await self.session.execute(stmt)
 
-    async def get_list(self, offset: int | None = None, limit: int | None = None) -> ChunkedIteratorResult:
-        stmt = Statements.select_all(offset, limit)
+    async def get_list(self, offset: int | None = None, limit: int | None = None,
+                       search: str = None) -> ChunkedIteratorResult:
+        stmt = Statements.select_all(offset, limit, search)
         return await self.session.execute(stmt)
 
     async def create(self, author: Author):
@@ -43,8 +44,15 @@ class Statements:
         return select(Author).where(Author.id == author_id).options(selectinload(Author.books))
 
     @classmethod
-    def select_all(cls, offset=0, limit=1000):
-        return select(Author).limit(limit).offset(offset).options(selectinload(Author.books)).order_by(Author.id)
+    def select_all(cls, offset=0, limit=1000, search: str = None):
+        stmt = select(Author).limit(limit).offset(offset).options(selectinload(Author.books))
+        if search:
+            stmt = stmt.where(or_(
+                Author.name.ilike(f'%{word}%'.strip()) |
+                Author.lastname.ilike(f'%{word}%'.strip())
+                for word in search.split()
+            ))
+        return stmt.order_by(Author.id)
 
     @classmethod
     def update(cls, author: AuthorUpdateRequest, values: dict):

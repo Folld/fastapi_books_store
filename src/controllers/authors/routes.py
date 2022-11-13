@@ -18,7 +18,7 @@ router = InferringRouter(prefix='/authors', tags=['authors'])
 @cbv(router)
 class AuthorsView:
     _session: AsyncSession = Depends(get_db)
-    _service: Type[AuthorService] = AuthorService
+    _service = AuthorService
 
     @property
     def session(self):
@@ -40,8 +40,8 @@ class AuthorsView:
 
     @router.get('/', status_code=status.HTTP_200_OK)
     async def get_list(
-            self, paginate: dict = Depends(offset_limit_paginator)) -> Response[List[AuthorRetrieveResponse]]:
-        data = await self.service.get_list(**paginate)
+            self, paginate: dict = Depends(offset_limit_paginator), search: str | None = None) -> Response[List[AuthorRetrieveResponse]]:
+        data = await self.service.get_list(**paginate, search=search)
         return Response(data=data)
 
     @router.post('/', status_code=status.HTTP_201_CREATED)

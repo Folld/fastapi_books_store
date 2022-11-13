@@ -10,6 +10,5 @@ class Author(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(50))
     lastname = Column(String(50))
-    patronumic = Column(String(50))
 
     books = relationship('Book', back_populates='author')

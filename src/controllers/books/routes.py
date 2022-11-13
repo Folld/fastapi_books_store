@@ -1,5 +1,3 @@
-from typing import Type
-
 from fastapi import status, Depends
 from fastapi_utils.inferring_router import InferringRouter
 from fastapi_utils.cbv import cbv
@@ -19,7 +17,7 @@ router = InferringRouter(prefix='/books', tags=['Books'])
 @cbv(router)
 class BooksView:
     _session: AsyncSession = Depends(get_db)
-    _service: Type[BookService] = BookService
+    _service = BookService
 
     @property
     def session(self):
