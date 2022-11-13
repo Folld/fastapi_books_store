@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from utils.responses import Response, Error, Statuses
+from controllers.responses import Response, Error, Statuses
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 

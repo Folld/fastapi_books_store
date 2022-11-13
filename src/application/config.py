@@ -3,7 +3,7 @@ from typing import Optional
 
 from pydantic import BaseSettings, Field
 
-BASE_DIR = Path(__file__).parent
+BASE_DIR = Path(__file__).parent.parent
 
 
 class _UvicornConfig(BaseSettings):

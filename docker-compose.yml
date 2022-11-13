@@ -4,8 +4,9 @@ version: "3"
 services:
   server:
     environment:
-      - APP_HOST
-      - APP_PORT
+      - APP_HOST  # postgres
+      - APP_PORT  # 5432
+      - POSTGRES_HOST  # postgres
     build: .
     ports:
       - "8000:${APP_PORT}"

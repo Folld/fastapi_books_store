@@ -1,4 +1,4 @@
-from database import ASession
+from application.database import ASession
 from fastapi import HTTPException
 from sqlalchemy.orm.decl_api import DeclarativeMeta
 

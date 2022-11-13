@@ -12,4 +12,4 @@ RUN pip install "poetry==$POETRY_VERSION"
 
 RUN poetry config virtualenvs.create false && poetry install --only main --no-interaction --no-ansi
 
-CMD ["python3", "main.py"]
+CMD ["python3", "app.py"]

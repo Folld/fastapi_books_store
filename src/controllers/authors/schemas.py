@@ -7,11 +7,13 @@ class BaseAuthorModel(APIModel):
 
 
 class AuthorBooks(APIModel):
+    id: int
     name: str | None
     price: float | None
 
 
 class AuthorRetrieveResponse(BaseAuthorModel):
+    id: int
     name: str
     lastname: str | None
     books: list[AuthorBooks]
