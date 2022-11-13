@@ -33,13 +33,19 @@ class BookCreateResponse(BookOut):
     ...
 
 
+class BookAuthor(APIModel):
+    id: int
+    name: str | None
+    lastname: str | None
+
+
 class BookUpdateResponse(BookOut):
     name: str | None = Field(example='Ring of the King', title='Name of book')
     price: float | None = Field(example=9.99)
-    author_id: int | None = Field(example=9.99)
+    author: BookAuthor | None
 
 
 class BookRetrieveResponse(BookOut):
     name: str | None
     price: str | None
-    author_id: int | None
+    author: BookAuthor | None
