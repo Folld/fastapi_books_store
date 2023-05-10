@@ -85,7 +85,7 @@ Contributions are welcome! If you encounter any issues or have suggestions for i
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](https://choosealicense.com/licenses/mit/).
 ```
 
 Feel free to modify the content as needed and add any additional sections or information specific to your project. Once you've made the necessary changes, save the file as `README.md` in the root directory of your GitHub project.
