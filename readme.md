@@ -69,14 +69,6 @@ Books Store is a web application that allows users to perform CRUD (Create, Read
 
 ## API Endpoints
 
-The following API endpoints are available:
-
-- `GET /books`: Get a list of all books.
-- `GET /books/{id}`: Get details of a specific book.
-- `POST /books`: Create a new book.
-- `PUT /books/{id}`: Update details of a specific book.
-- `DELETE /books/{id}`: Delete a book.
-
 For detailed information about request and response formats, refer to the API documentation available at `http://localhost:8000/docs`.
 
 ## Contributing
